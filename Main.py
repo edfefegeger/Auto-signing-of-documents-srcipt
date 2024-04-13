@@ -26,18 +26,21 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width
             image1_resized = resize_image(image1, new_width=width_image1, new_height=height_image1)
             image1_1_resized = resize_image(image1, new_width=width_image1_1, new_height=height_image1_1)
             image2_resized = resize_image(image2, new_width=width_image2, new_height=height_image2)
+            image2_2_resized = resize_image(image2, new_width=width_image2_2, new_height=height_image2_2)
 
             # Применяем случайные изменения к первому изображению
             image1_resized = apply_random_transforms(image1_resized)
             image1_1_resized = apply_random_transforms(image1_1_resized)
 
             # Применяем случайные изменения ко второму изображению
-            image2_resized = apply_random_transforms(image2_resized)
+            image2_resized = apply_random_transforms2(image2_resized)
+            image2_2_resized = apply_random_transforms2(image2_2_resized)
 
             # Преобразуем изображения в PDF страницы для наложения
             image1_pdf = image_to_pdf(image1_resized)
             image1_1_pdf = image_to_pdf(image1_1_resized)
             image2_pdf = image_to_pdf(image2_resized)
+            image2_2_pdf = image_to_pdf(image2_2_resized)
 
             # Наложение первого изображения по указанным координатам
             page.mergeTranslatedPage(image1_pdf.getPage(0), x, y)
@@ -50,7 +53,7 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width
             if f"{i + 1}_1" in coordinates:
                 x_additional, y_additional = coordinates[f"{i + 1}_1"]
                 page.mergeTranslatedPage(image1_1_pdf.getPage(0), x_additional, y_additional)
-                page.mergeTranslatedPage(image2_pdf.getPage(0), x_additional, y_additional)
+                page.mergeTranslatedPage(image2_2_pdf.getPage(0), x_additional, y_additional)
 
     output_pdf_path = os.path.join(os.getcwd(), "Result.pdf")
 
@@ -77,6 +80,16 @@ def apply_random_transforms(image):
 
     return image
 
+def apply_random_transforms2(image):
+    # Случайные параметры для изменения изображения
+    rotation_angle = random.randint(-10, 10)  # Случайный угол поворота (-10 градусов до 10 градусов)
+    scale_factor = random.uniform(0.8, 1.2)   # Случайный масштаб (от 0.8 до 1.2)
+
+    # Применяем поворот и масштабирование к изображению
+    image = image.rotate(rotation_angle, resample=Image.BICUBIC)
+
+    return image
+
 def generate_additional_coordinates(coordinates):
     additional_coordinates = {}
 
@@ -100,6 +113,8 @@ if __name__ == "__main__":
     height_image1_1 = int(input("Введите высоту для второй подписи: "))
     width_image2 = int(input("Введите ширину для печати: "))
     height_image2 = int(input("Введите высоту для печати: "))
+    width_image2_2 = int(input("Введите ширину для второй печати: "))
+    height_image2_2 = int(input("Введите высоту для второй печати: "))
 
     # Диалоговое окно для выбора файла PDF
     pdf_path = filedialog.askopenfilename(title="Выберите PDF-файл", filetypes=[("PDF files", "*.pdf")])

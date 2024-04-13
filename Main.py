@@ -3,8 +3,9 @@ import PyPDF2
 from PIL import Image
 from io import BytesIO
 from tkinter import Tk, filedialog
+import random
 
-def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
+def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width_image1, height_image1, width_image1_1, height_image1_1, width_image2, height_image2):
     pdf_reader = PyPDF2.PdfFileReader(open(pdf_path, "rb"))
     pdf_writer = PyPDF2.PdfFileWriter()
 
@@ -22,10 +23,16 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
             image2 = Image.open(image2_path)
 
             # Изменяем размер изображений
-            image1_resized = resize_image(image1, new_width=width_image1, new_height=height_image1)  # Пример нового размера (300x120)
+            image1_resized = resize_image(image1, new_width=width_image1, new_height=height_image1)
             image1_1_resized = resize_image(image1, new_width=width_image1_1, new_height=height_image1_1)
+            image2_resized = resize_image(image2, new_width=width_image2, new_height=height_image2)
 
-            image2_resized = resize_image(image2, new_width=width_image2, new_height=height_image2)  # Пример нового размера (150x150)
+            # Применяем случайные изменения к первому изображению
+            image1_resized = apply_random_transforms(image1_resized)
+            image1_1_resized = apply_random_transforms(image1_1_resized)
+
+            # Применяем случайные изменения ко второму изображению
+            image2_resized = apply_random_transforms(image2_resized)
 
             # Преобразуем изображения в PDF страницы для наложения
             image1_pdf = image_to_pdf(image1_resized)
@@ -59,6 +66,17 @@ def image_to_pdf(image):
 def resize_image(image, new_width, new_height):
     return image.resize((new_width, new_height))
 
+def apply_random_transforms(image):
+    # Случайные параметры для изменения изображения
+    rotation_angle = random.randint(-10, 10)  # Случайный угол поворота (-10 градусов до 10 градусов)
+    scale_factor = random.uniform(0.8, 1.2)   # Случайный масштаб (от 0.8 до 1.2)
+
+    # Применяем поворот и масштабирование к изображению
+    image = image.rotate(rotation_angle, resample=Image.BICUBIC)
+    image = image.resize((int(image.width * scale_factor), int(image.height * scale_factor)), resample=Image.BICUBIC)
+
+    return image
+
 def generate_additional_coordinates(coordinates):
     additional_coordinates = {}
 
@@ -74,6 +92,8 @@ def generate_additional_coordinates(coordinates):
 if __name__ == "__main__":
     root = Tk()
     root.withdraw()  # Скрыть основное окно Tkinter
+
+    # Запрос пользовательских параметров для изображений
     width_image1 = int(input("Введите ширину для подписи: "))
     height_image1 = int(input("Введите высоту для подписи: "))
     width_image1_1 = int(input("Введите ширину для второй подписи: "))
@@ -97,9 +117,4 @@ if __name__ == "__main__":
         # Генерация дополнительных координат на основе основных страниц
         coordinates = generate_additional_coordinates(base_coordinates)
 
-        overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates)
-
-
-
-#(image1, new_width=300, new_height=120)
-#(image2, new_width=150, new_height=150)
+        overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width_image1, height_image1, width_image1_1, height_image1_1, width_image2, height_image2)

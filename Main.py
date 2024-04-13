@@ -21,18 +21,26 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
             image2 = Image.open(image2_path)
 
             # Изменяем размер изображений
-            image1_resized = resize_image(image1, new_width=120, new_height=120)  # Пример нового размера (200x200)
-            image2_resized = resize_image(image2, new_width=150, new_height=150)  # Пример нового размера (300x300)
+            image1_resized = resize_image(image1, new_width=300, new_height=120)  # Пример нового размера (300x120)
+            image2_resized = resize_image(image2, new_width=150, new_height=150)  # Пример нового размера (150x150)
 
-            # Преобразование изображений в PDF страницы для наложения
+            # Преобразуем изображения в PDF страницы для наложения
             image1_pdf = image_to_pdf(image1_resized)
             image2_pdf = image_to_pdf(image2_resized)
 
             # Наложение первого изображения по указанным координатам
             page.mergeTranslatedPage(image1_pdf.getPage(0), x, y)
 
-            # Наложение второго изображения поверх первого на той же странице
+            # Наложение второго изображения по координатам 2
+            
             page.mergeTranslatedPage(image2_pdf.getPage(0), x, y)
+
+            # Наложение второго изображения по координатам 2_1
+            key_2_1 = str(i + 1) + "_1"  # Формируем правильный ключ для словаря
+            if key_2_1 in coordinates:
+                x2_1, y2_1 = coordinates[key_2_1]
+                page.mergeTranslatedPage(image1_pdf.getPage(0), x2_1, y2_1)
+                page.mergeTranslatedPage(image2_pdf.getPage(0), x2_1, y2_1)
 
     output_pdf_path = os.path.join(os.getcwd(), "output.pdf")
 
@@ -53,10 +61,11 @@ if __name__ == "__main__":
     image2_path = "C:/Users/Super PC/Downloads/печать ГКЗ.png"
 
     coordinates = {
-        2: (70, 70),    # Пример координат для страницы 2
-        3: (70, 200),   # Пример координат для страницы 3
-        4: (70, 70),    # Пример координат для страницы 4
-        5: (400, 500)   # Пример координат для страницы 5
+        2: (70, 70),     # Пример координат для страницы 2
+        "2_1": (320, 70), # Дополнительные координаты для страницы 2_1
+        3: (70, 200),    # Пример координат для страницы 3
+        "3_1": (320, 200), # Дополнительные координаты для страницы 3_1
+        5: (400, 500)    # Пример координат для страницы 5
     }
 
     pdf_path = "C:/Users/Super PC/Downloads/Договор готовый 1.pdf"

@@ -7,7 +7,7 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
     pdf_reader = PyPDF2.PdfFileReader(open(pdf_path, "rb"))
     pdf_writer = PyPDF2.PdfFileWriter()
 
-    page_numbers = [2, 3, 4, 5]
+    page_numbers = list(coordinates.keys())  # Используем страницы из указанных координат
 
     for i in range(pdf_reader.getNumPages()):
         page = pdf_reader.getPage(i)
@@ -31,18 +31,17 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
             # Наложение первого изображения по указанным координатам
             page.mergeTranslatedPage(image1_pdf.getPage(0), x, y)
 
-            # Наложение второго изображения по координатам 2
-            
-            page.mergeTranslatedPage(image2_pdf.getPage(0), x, y)
+            # Наложение второго изображения по координатам
+            if i + 1 in coordinates:
+                page.mergeTranslatedPage(image2_pdf.getPage(0), x, y)
 
-            # Наложение второго изображения по координатам 2_1
-            key_2_1 = str(i + 1) + "_1"  # Формируем правильный ключ для словаря
-            if key_2_1 in coordinates:
-                x2_1, y2_1 = coordinates[key_2_1]
-                page.mergeTranslatedPage(image1_pdf.getPage(0), x2_1, y2_1)
-                page.mergeTranslatedPage(image2_pdf.getPage(0), x2_1, y2_1)
+            # Наложение дополнительных изображений по координатам вида "страница_1"
+            if f"{i + 1}_1" in coordinates:
+                x_additional, y_additional = coordinates[f"{i + 1}_1"]
+                page.mergeTranslatedPage(image1_pdf.getPage(0), x_additional, y_additional)
+                page.mergeTranslatedPage(image2_pdf.getPage(0), x_additional, y_additional)
 
-    output_pdf_path = os.path.join(os.getcwd(), "output.pdf")
+    output_pdf_path = os.path.join(os.getcwd(), "Result.pdf")
 
     with open(output_pdf_path, "wb") as output_pdf:
         pdf_writer.write(output_pdf)
@@ -56,17 +55,30 @@ def image_to_pdf(image):
 def resize_image(image, new_width, new_height):
     return image.resize((new_width, new_height))
 
+def generate_additional_coordinates(coordinates):
+    additional_coordinates = {}
+
+    for page, coord in coordinates.items():
+        if isinstance(page, int):
+            page_str = str(page)
+            additional_key = f"{page_str}_1"
+            additional_coordinates[additional_key] = (coord[0] + 250, coord[1])  # Пример смещения для x на 250
+
+    coordinates.update(additional_coordinates)
+    return coordinates
+
 if __name__ == "__main__":
     image1_path = "C:/Users/Super PC/Downloads/Подпись 2.png"
     image2_path = "C:/Users/Super PC/Downloads/печать ГКЗ.png"
 
-    coordinates = {
+    # Основные координаты для страниц PDF
+    base_coordinates = {
         2: (70, 70),     # Пример координат для страницы 2
-        "2_1": (320, 70), # Дополнительные координаты для страницы 2_1
         3: (70, 200),    # Пример координат для страницы 3
-        "3_1": (320, 200), # Дополнительные координаты для страницы 3_1
-        5: (400, 500)    # Пример координат для страницы 5
     }
+
+    # Генерация дополнительных координат на основе основных страниц
+    coordinates = generate_additional_coordinates(base_coordinates)
 
     pdf_path = "C:/Users/Super PC/Downloads/Договор готовый 1.pdf"
 

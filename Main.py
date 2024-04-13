@@ -129,15 +129,18 @@ if __name__ == "__main__":
         image2_path = "C:/Users/Super PC/Downloads/печать ГКЗ.png"
 
         # Основные координаты для страниц PDF
-        base_coordinates = {
-            2: (coordinates1, coordinates1_1),     # Пример координат для страницы 2
-            3: (coordinates2, coordinates2_2),    # Пример координат для страницы 3
-        }
+        base_coordinates = {}
+
+        # Заполняем словарь base_coordinates до страницы 1000 с шагом 3
+        for page_number in range(2, 1001, 3):
+            if page_number + 1 <= 1000:
+                base_coordinates[page_number] = (coordinates1, coordinates1_1)  # Для страницы подписи
+                base_coordinates[page_number + 1] = (coordinates2, coordinates2_2)  # Для страницы печати
 
         # Генерация дополнительных координат на основе основных страниц
         coordinates = generate_additional_coordinates(base_coordinates)
-
         overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width_image1, height_image1, width_image1_1, height_image1_1, width_image2, height_image2)
+        # Наложение изображений на PDF
 
 #Введите ширину для подписи: 300
 #Введите высоту для подписи: 120

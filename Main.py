@@ -16,18 +16,23 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
         if (i + 1) in page_numbers:
             x, y = coordinates[i + 1]
 
+            # Открываем изображения
             image1 = Image.open(image1_path)
             image2 = Image.open(image2_path)
 
+            # Изменяем размер изображений
+            image1_resized = resize_image(image1, new_width=120, new_height=120)  # Пример нового размера (200x200)
+            image2_resized = resize_image(image2, new_width=150, new_height=150)  # Пример нового размера (300x300)
+
             # Преобразование изображений в PDF страницы для наложения
-            image1_pdf = image_to_pdf(image1)
-            image2_pdf = image_to_pdf(image2)
+            image1_pdf = image_to_pdf(image1_resized)
+            image2_pdf = image_to_pdf(image2_resized)
 
             # Наложение первого изображения по указанным координатам
             page.mergeTranslatedPage(image1_pdf.getPage(0), x, y)
 
             # Наложение второго изображения поверх первого на той же странице
-            page.mergeTranslatedPage(image2_pdf.getPage(0), x, y)  
+            page.mergeTranslatedPage(image2_pdf.getPage(0), x, y)
 
     output_pdf_path = os.path.join(os.getcwd(), "output.pdf")
 
@@ -39,6 +44,9 @@ def image_to_pdf(image):
     image.save(temp_pdf, format="PDF", resolution=100.0)
     temp_pdf.seek(0)
     return PyPDF2.PdfFileReader(temp_pdf)
+
+def resize_image(image, new_width, new_height):
+    return image.resize((new_width, new_height))
 
 if __name__ == "__main__":
     image1_path = "C:/Users/Super PC/Downloads/Подпись 2.png"

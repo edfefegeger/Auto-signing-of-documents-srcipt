@@ -23,10 +23,13 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
 
             # Изменяем размер изображений
             image1_resized = resize_image(image1, new_width=width_image1, new_height=height_image1)  # Пример нового размера (300x120)
+            image1_1_resized = resize_image(image1, new_width=width_image1_1, new_height=height_image1_1)
+
             image2_resized = resize_image(image2, new_width=width_image2, new_height=height_image2)  # Пример нового размера (150x150)
 
             # Преобразуем изображения в PDF страницы для наложения
             image1_pdf = image_to_pdf(image1_resized)
+            image1_1_pdf = image_to_pdf(image1_1_resized)
             image2_pdf = image_to_pdf(image2_resized)
 
             # Наложение первого изображения по указанным координатам
@@ -39,7 +42,7 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
             # Наложение дополнительных изображений по координатам вида "страница_1"
             if f"{i + 1}_1" in coordinates:
                 x_additional, y_additional = coordinates[f"{i + 1}_1"]
-                page.mergeTranslatedPage(image1_pdf.getPage(0), x_additional, y_additional)
+                page.mergeTranslatedPage(image1_1_pdf.getPage(0), x_additional, y_additional)
                 page.mergeTranslatedPage(image2_pdf.getPage(0), x_additional, y_additional)
 
     output_pdf_path = os.path.join(os.getcwd(), "Result.pdf")
@@ -73,6 +76,8 @@ if __name__ == "__main__":
     root.withdraw()  # Скрыть основное окно Tkinter
     width_image1 = int(input("Введите ширину для подписи: "))
     height_image1 = int(input("Введите высоту для подписи: "))
+    width_image1_1 = int(input("Введите ширину для второй подписи: "))
+    height_image1_1 = int(input("Введите высоту для второй подписи: "))
     width_image2 = int(input("Введите ширину для печати: "))
     height_image2 = int(input("Введите высоту для печати: "))
 
@@ -93,3 +98,8 @@ if __name__ == "__main__":
         coordinates = generate_additional_coordinates(base_coordinates)
 
         overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates)
+
+
+
+#(image1, new_width=300, new_height=120)
+#(image2, new_width=150, new_height=150)

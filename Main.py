@@ -2,6 +2,7 @@ import os
 import PyPDF2
 from PIL import Image
 from io import BytesIO
+from tkinter import Tk, filedialog
 
 def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
     pdf_reader = PyPDF2.PdfFileReader(open(pdf_path, "rb"))
@@ -21,8 +22,8 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates):
             image2 = Image.open(image2_path)
 
             # Изменяем размер изображений
-            image1_resized = resize_image(image1, new_width=300, new_height=120)  # Пример нового размера (300x120)
-            image2_resized = resize_image(image2, new_width=150, new_height=150)  # Пример нового размера (150x150)
+            image1_resized = resize_image(image1, new_width=width_image1, new_height=height_image1)  # Пример нового размера (300x120)
+            image2_resized = resize_image(image2, new_width=width_image2, new_height=height_image2)  # Пример нового размера (150x150)
 
             # Преобразуем изображения в PDF страницы для наложения
             image1_pdf = image_to_pdf(image1_resized)
@@ -68,18 +69,27 @@ def generate_additional_coordinates(coordinates):
     return coordinates
 
 if __name__ == "__main__":
-    image1_path = "C:/Users/Super PC/Downloads/Подпись 2.png"
-    image2_path = "C:/Users/Super PC/Downloads/печать ГКЗ.png"
+    root = Tk()
+    root.withdraw()  # Скрыть основное окно Tkinter
+    width_image1 = int(input("Введите ширину для подписи: "))
+    height_image1 = int(input("Введите высоту для подписи: "))
+    width_image2 = int(input("Введите ширину для печати: "))
+    height_image2 = int(input("Введите высоту для печати: "))
 
-    # Основные координаты для страниц PDF
-    base_coordinates = {
-        2: (70, 70),     # Пример координат для страницы 2
-        3: (70, 200),    # Пример координат для страницы 3
-    }
+    # Диалоговое окно для выбора файла PDF
+    pdf_path = filedialog.askopenfilename(title="Выберите PDF-файл", filetypes=[("PDF files", "*.pdf")])
 
-    # Генерация дополнительных координат на основе основных страниц
-    coordinates = generate_additional_coordinates(base_coordinates)
+    if pdf_path:
+        image1_path = "C:/Users/Super PC/Downloads/Подпись 2.png"
+        image2_path = "C:/Users/Super PC/Downloads/печать ГКЗ.png"
 
-    pdf_path = "C:/Users/Super PC/Downloads/Договор готовый 1.pdf"
+        # Основные координаты для страниц PDF
+        base_coordinates = {
+            2: (70, 70),     # Пример координат для страницы 2
+            3: (70, 200),    # Пример координат для страницы 3
+        }
 
-    overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates)
+        # Генерация дополнительных координат на основе основных страниц
+        coordinates = generate_additional_coordinates(base_coordinates)
+
+        overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates)

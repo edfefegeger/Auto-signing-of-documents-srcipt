@@ -116,6 +116,11 @@ if __name__ == "__main__":
     width_image2_2 = int(input("Введите ширину для второй печати: "))
     height_image2_2 = int(input("Введите высоту для второй печати: "))
 
+    coordinates1 = int(input("Введите кординаты для страницы 2 (1): "))
+    coordinates1_1 = int(input("Введите кординаты для страницы 2 (2): "))
+    coordinates2 = int(input("Введите кординаты для страницы 3 (1): "))
+    coordinates2_2 = int(input("Введите кординаты для страницы 3 (2): "))
+
     # Диалоговое окно для выбора файла PDF
     pdf_path = filedialog.askopenfilename(title="Выберите PDF-файл", filetypes=[("PDF files", "*.pdf")])
 
@@ -125,11 +130,23 @@ if __name__ == "__main__":
 
         # Основные координаты для страниц PDF
         base_coordinates = {
-            2: (70, 70),     # Пример координат для страницы 2
-            3: (70, 200),    # Пример координат для страницы 3
+            2: (coordinates1, coordinates1_1),     # Пример координат для страницы 2
+            3: (coordinates2, coordinates2_2),    # Пример координат для страницы 3
         }
 
         # Генерация дополнительных координат на основе основных страниц
         coordinates = generate_additional_coordinates(base_coordinates)
 
         overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width_image1, height_image1, width_image1_1, height_image1_1, width_image2, height_image2)
+
+#Введите ширину для подписи: 300
+#Введите высоту для подписи: 120
+#Введите ширину для второй подписи: 300
+#Введите высоту для второй подписи: 120
+#Введите ширину для печати: 150
+#Введите высоту для печати: 150
+#Введите ширину для второй печати: 150
+#Введите высоту для второй печати: 150
+
+#2: (70, 70),  
+#3: (70, 200)

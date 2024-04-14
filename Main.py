@@ -189,6 +189,11 @@ if __name__ == "__main__":
     coordinates2 = int(input("Введите координаты для страницы 3 (1): "))
     coordinates2_2 = int(input("Введите координаты для страницы 3 (2): "))
 
+    coordinates3 = int(input("Введите координаты для страницы 2 (Для правой стороны) (1): "))
+    coordinates3_1 = int(input("Введите координаты для страницы 2 (2) (Для правой стороны): "))
+    coordinates4 = int(input("Введите координаты для страницы 3 (1) (Для правой стороны): "))
+    coordinates4_2 = int(input("Введите координаты для страницы 3 (2) (Для правой стороны): "))
+
     rotation_angle1 = int(input("Введите первую точку диапазона случайного вращения для подписи (Пример: -10): "))
     rotation_angle2 = int(input("Введите вторую точку диапазона случайного вращения для подписи (Пример: 10): "))
 
@@ -216,8 +221,8 @@ if __name__ == "__main__":
         image1_path = filedialog.askopenfilename(title="Выберите файл с подписью")
         image2_path = filedialog.askopenfilename(title="Выберите файл с печатью")
 
-        image3_path = filedialog.askopenfilename(title="Выберите файл с подписью (Второй)")
-        image4_path = filedialog.askopenfilename(title="Выберите файл с печатью (Второй)")
+        image3_path = filedialog.askopenfilename(title="Выберите файл с подписью (Второй стороны)")
+        image4_path = filedialog.askopenfilename(title="Выберите файл с печатью (Второй стороны)")
 
         base_coordinates = {}
 

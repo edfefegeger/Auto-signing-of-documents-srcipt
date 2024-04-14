@@ -71,28 +71,28 @@ def resize_image(image, new_width, new_height):
 
 def apply_random_transforms(image):
     # Случайные параметры для изменения изображения
-    rotation_angle = random.randint(-10, 10)  # Случайный угол поворота (-10 градусов до 10 градусов)
-    scale_factor = random.uniform(0.8, 1.2)   # Случайный масштаб (от 0.8 до 1.2)
+    rotation_angle = random.randint(rotation_angle1, rotation_angle2)  # Случайный угол поворота (-10 градусов до 10 градусов)
+    scale_factor_horizontal = random.uniform(scale_factor_horizontal1, scale_factor_horizontal2)   # Случайный масштаб по горизонтали (от 80% до 120%)
+    scale_factor_vertical = random.uniform(scale_factor_vertical1, scale_factor_vertical2)   # Случайный масштаб по вертикали (от 80% до 120%)
 
     # Поворот изображения
     rotated_image = image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
 
-    # Рассчитываем новый размер, необходимый для вмещения повернутого изображения
-    new_size = (
-        int(rotated_image.width * scale_factor),
-        int(rotated_image.height * scale_factor)
-    )
+    # Рассчитываем новый размер, необходимый для вмещения повернутого и масштабированного изображения
+    new_width = int(rotated_image.width * scale_factor_horizontal)
+    new_height = int(rotated_image.height * scale_factor_vertical)
 
     # Изменяем размер изображения до рассчитанного размера
-    resized_image = rotated_image.resize(new_size, resample=Image.BICUBIC)
+    resized_image = rotated_image.resize((new_width, new_height), resample=Image.BICUBIC)
 
     return resized_image
 
 
 
+
 def apply_random_transforms2(image):
     # Случайные параметры для изменения изображения
-    rotation_angle = random.randint(-10, 10)  # Случайный угол поворота (-10 градусов до 10 градусов)
+    rotation_angle = random.randint(rotation_angle1_1, rotation_angle2_2)  # Случайный угол поворота (-10 градусов до 10 градусов)
     scale_factor = random.uniform(0.8, 1.2)   # Случайный масштаб (от 0.8 до 1.2)
 
     # Применяем поворот и масштабирование к изображению
@@ -131,6 +131,17 @@ if __name__ == "__main__":
     coordinates2 = int(input("Введите кординаты для страницы 3 (1): "))
     coordinates2_2 = int(input("Введите кординаты для страницы 3 (2): "))
 
+
+    rotation_angle1 = int(input("Введите первую точку диапазона случайного вращения для подписи (Пример: -10): "))
+    rotation_angle2 = int(input("Введите вторую точку диапазона случайного вращения для подписи (Пример: 10): "))
+    scale_factor_horizontal1 = float(input("Введите первую точку случайного масштаба по горизонтали для подписи. Пример: 0.8 (от 80%): "))
+    scale_factor_horizontal2 = float(input("Введите вторую точку случайного масштаба по горизонтали для подписи. Пример: 1.2 (до 120%): "))
+    scale_factor_vertical1 = float(input("Введите первую точку случайного масштаба по вертикали для подписи. Пример: 0.8 (от 80%): "))
+    scale_factor_vertical2 = float(input("Введите вторую точку случайного масштаба по вертикали для подписи. Пример: 1.2 (до 120%): "))
+
+    rotation_angle1_1 = int(input("Введите первую точку диапазона случайного вращения для печати (Пример: -10): "))
+    rotation_angle2_2 = int(input("Введите вторую точку диапазона случайного вращения для печати (Пример: 10): "))
+
     # Диалоговое окно для выбора файла PDF
     pdf_path = filedialog.askopenfilename(title="Выберите PDF-файл", filetypes=[("PDF files", "*.pdf")])
 
@@ -150,6 +161,7 @@ if __name__ == "__main__":
         # Генерация дополнительных координат на основе основных страниц
         coordinates = generate_additional_coordinates(base_coordinates)
         overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width_image1, height_image1, width_image1_1, height_image1_1, width_image2, height_image2)
+        print("Документ обработан")
         
 
         # Наложение изображений на PDF
@@ -165,3 +177,7 @@ if __name__ == "__main__":
 
 #2: (70, 70),  
 #3: (70, 200)
+
+    #rotation_angle = random.randint(-10, 10)  # Случайный угол поворота (-10 градусов до 10 градусов)
+    #scale_factor_horizontal = random.uniform(0.8, 1.2)   # Случайный масштаб по горизонтали (от 80% до 120%)
+    #scale_factor_vertical = random.uniform(0.8, 1.2)   # Случайный масштаб по вертикали (от 80% до 120%)

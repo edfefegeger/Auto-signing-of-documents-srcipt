@@ -70,7 +70,6 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates,
             page.mergeTranslatedPage(image1_pdf.getPage(0), x, y)
 
             # Наложение второго изображения по координатам
-
             page.mergeTranslatedPage(image2_pdf.getPage(0), x, y)
 
             # Наложение дополнительных изображений по координатам вида "страница_1"
@@ -130,7 +129,7 @@ def apply_random_transforms2(image, rotation_angle1, rotation_angle2,
     x_shift = int(image.width * (horizontal_value / 100))
     y_shift = int(image.height * (vertical_value / 100))
 
-    rotated_image = image.rotate(rotation_angle, resample=Image.BICUBIC)
+    rotated_image = image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
     shifted_image = rotated_image.transform(rotated_image.size, Image.AFFINE, (1, 0, x_shift, 0, 1, y_shift))
 
     return shifted_image
@@ -176,7 +175,7 @@ if __name__ == "__main__":
     rotation_angle1_1 = int(input("Введите первую точку диапазона случайного вращения для печати (Пример: -10): "))
     rotation_angle2_2 = int(input("Введите вторую точку диапазона случайного вращения для печати (Пример: 10): "))
 
-    coordinates_modify1 = int(input("Введите первую точку диапазона случайного смещения по горизонтали для подписи (Пример: 15 (на 15% вправо)): "))
+    coordinates_modify1 = int(input("Введите первую точку диапазона случайного смещения по горизонтали для подписи (Пример: -15 (на 15% вправо)): "))
     coordinates_modify1_1 = int(input("Введите вторую точку диапазона случайного смещения по горизонтали для подписи (Пример: 15 (на 15% вправо)): "))
     coordinates_modify2 = int(input("Введите первую точку диапазона случайного смещения по вертикали для подписи (Пример: -10 (на 10% вверх)): "))
     coordinates_modify2_2 = int(input("Введите вторую точку диапазона случайного смещения по вертикали для подписи (Пример: 10 (на 10% вниз)): "))

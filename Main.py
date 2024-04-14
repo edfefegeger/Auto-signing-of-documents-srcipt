@@ -5,7 +5,7 @@ from io import BytesIO
 from tkinter import Tk, filedialog
 import random
 
-def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates,
+def overlay_images_on_pdf(pdf_path, image1_path, image2_path, image3_path, image4_path, coordinates,
                           width_image1, height_image1, width_image1_1, height_image1_1,
                           width_image2, height_image2, width_image2_2, height_image2_2,
                           rotation_angle1, rotation_angle2,
@@ -32,11 +32,14 @@ def overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates,
             image1 = Image.open(image1_path)
             image2 = Image.open(image2_path)
 
+            image3 = Image.open(image3_path)
+            image4 = Image.open(image4_path)
+
             # Изменяем размер изображений
             image1_resized = resize_image(image1, width_image1, height_image1)
-            image1_1_resized = resize_image(image1, width_image1_1, height_image1_1)
+            image1_1_resized = resize_image(image3, width_image1_1, height_image1_1)
             image2_resized = resize_image(image2, width_image2, height_image2)
-            image2_2_resized = resize_image(image2, width_image2_2, height_image2_2)
+            image2_2_resized = resize_image(image4, width_image2_2, height_image2_2)
 
             # Применяем случайные изменения к первому изображению
             image1_transformed = apply_random_transforms(image1_resized, rotation_angle1, rotation_angle2,
@@ -213,6 +216,9 @@ if __name__ == "__main__":
         image1_path = filedialog.askopenfilename(title="Выберите файл с подписью")
         image2_path = filedialog.askopenfilename(title="Выберите файл с печатью")
 
+        image3_path = filedialog.askopenfilename(title="Выберите файл с подписью (Второй)")
+        image4_path = filedialog.askopenfilename(title="Выберите файл с печатью (Второй)")
+
         base_coordinates = {}
 
         for page_number in range(2, 1001, 3):
@@ -223,7 +229,7 @@ if __name__ == "__main__":
         coordinates = generate_additional_coordinates(base_coordinates)
 
         print('Обработка...')
-        overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates,
+        overlay_images_on_pdf(pdf_path, image1_path, image2_path, image3_path, image4_path, coordinates,
                               width_image1, height_image1, width_image1_1, height_image1_1,
                               width_image2, height_image2, width_image2_2, height_image2_2,
                               rotation_angle1, rotation_angle2,

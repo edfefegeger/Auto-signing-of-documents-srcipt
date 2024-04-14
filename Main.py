@@ -125,8 +125,8 @@ if __name__ == "__main__":
     pdf_path = filedialog.askopenfilename(title="Выберите PDF-файл", filetypes=[("PDF files", "*.pdf")])
 
     if pdf_path:
-        image1_path = "C:/Users/Super PC/Downloads/Подпись 2.png"
-        image2_path = "C:/Users/Super PC/Downloads/печать ГКЗ.png"
+        image1_path = filedialog.askopenfilename(title="Выберите файл с подписью")
+        image2_path = filedialog.askopenfilename(title="Выберите файл с печатью")
 
         # Основные координаты для страниц PDF
         base_coordinates = {}

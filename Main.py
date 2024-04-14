@@ -166,7 +166,7 @@ def generate_additional_coordinates(coordinates):
         if isinstance(page, int):
             page_str = str(page)
             additional_key = f"{page_str}_1"
-            additional_coordinates[additional_key] = (coord[0] + 250, coord[1])
+            additional_coordinates[additional_key] = (coord[0] + space_between, coord[1])
 
     coordinates.update(additional_coordinates)
     return coordinates
@@ -188,11 +188,8 @@ if __name__ == "__main__":
     coordinates1_1 = int(input("Введите координаты для страницы 2 (2): "))
     coordinates2 = int(input("Введите координаты для страницы 3 (1): "))
     coordinates2_2 = int(input("Введите координаты для страницы 3 (2): "))
+    space_between = int(input("Введите отступ по ширине для второй стороны документы (Например: 250): "))
 
-    coordinates3 = int(input("Введите координаты для страницы 2 (Для правой стороны) (1): "))
-    coordinates3_1 = int(input("Введите координаты для страницы 2 (2) (Для правой стороны): "))
-    coordinates4 = int(input("Введите координаты для страницы 3 (1) (Для правой стороны): "))
-    coordinates4_2 = int(input("Введите координаты для страницы 3 (2) (Для правой стороны): "))
 
     rotation_angle1 = int(input("Введите первую точку диапазона случайного вращения для подписи (Пример: -10): "))
     rotation_angle2 = int(input("Введите вторую точку диапазона случайного вращения для подписи (Пример: 10): "))

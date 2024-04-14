@@ -74,11 +74,21 @@ def apply_random_transforms(image):
     rotation_angle = random.randint(-10, 10)  # Случайный угол поворота (-10 градусов до 10 градусов)
     scale_factor = random.uniform(0.8, 1.2)   # Случайный масштаб (от 0.8 до 1.2)
 
-    # Применяем поворот и масштабирование к изображению
-    image = image.rotate(rotation_angle, resample=Image.BICUBIC)
-    image = image.resize((int(image.width * scale_factor), int(image.height * scale_factor)), resample=Image.BICUBIC)
+    # Поворот изображения
+    rotated_image = image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
 
-    return image
+    # Рассчитываем новый размер, необходимый для вмещения повернутого изображения
+    new_size = (
+        int(rotated_image.width * scale_factor),
+        int(rotated_image.height * scale_factor)
+    )
+
+    # Изменяем размер изображения до рассчитанного размера
+    resized_image = rotated_image.resize(new_size, resample=Image.BICUBIC)
+
+    return resized_image
+
+
 
 def apply_random_transforms2(image):
     # Случайные параметры для изменения изображения
@@ -140,6 +150,8 @@ if __name__ == "__main__":
         # Генерация дополнительных координат на основе основных страниц
         coordinates = generate_additional_coordinates(base_coordinates)
         overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width_image1, height_image1, width_image1_1, height_image1_1, width_image2, height_image2)
+        
+
         # Наложение изображений на PDF
 
 #Введите ширину для подписи: 300

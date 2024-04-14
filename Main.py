@@ -107,14 +107,26 @@ def apply_random_transforms(image, rotation_angle1, rotation_angle2,
     vertical_value = random.randint(coordinates_modify2, coordinates_modify2_2)
     
     x_shift = int(image.width * (horizontal_value / 100))
+    x_shift = max(-image.width, min(image.width, x_shift))
+    
     y_shift = int(image.height * (vertical_value / 100))
+    y_shift = max(-image.height, min(image.height, y_shift))
 
+    # Рассчитываем новые размеры после масштабирования
     new_width = int(image.width * scale_factor_horizontal)
     new_height = int(image.height * scale_factor_vertical)
-    
+
+    # Масштабируем изображение
     resized_image = image.resize((new_width, new_height), resample=Image.BICUBIC)
-    rotated_image = resized_image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
-    shifted_image = rotated_image.transform(rotated_image.size, Image.AFFINE, (1, 0, x_shift, 0, 1, y_shift))
+
+    # Вращаем масштабированное изображение
+    rotated_image = image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
+
+    # Рассчитываем матрицу аффинного преобразования для сдвига
+    shift_matrix = (1, 0, x_shift, 0, 1, y_shift)
+
+    # Применяем аффинное преобразование (сдвиг)
+    shifted_image = rotated_image.transform(rotated_image.size, Image.AFFINE, shift_matrix, resample=Image.BICUBIC)
 
     return shifted_image
 
@@ -122,17 +134,27 @@ def apply_random_transforms2(image, rotation_angle1, rotation_angle2,
                              coordinates_modify3, coordinates_modify3_1,
                              coordinates_modify4, coordinates_modify4_2):
 
-    rotation_angle = random.randint(rotation_angle1, rotation_angle2)
+    rotation_angle = random.randint(rotation_angle1_1, rotation_angle2_2)
     horizontal_value = random.randint(coordinates_modify3, coordinates_modify3_1)
     vertical_value = random.randint(coordinates_modify4, coordinates_modify4_2)
 
     x_shift = int(image.width * (horizontal_value / 100))
-    y_shift = int(image.height * (vertical_value / 100))
+    x_shift = max(-image.width, min(image.width, x_shift))
 
+    y_shift = int(image.height * (vertical_value / 100))
+    y_shift = max(-image.height, min(image.height, y_shift))
+
+    # Вращаем изображение
     rotated_image = image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
-    shifted_image = rotated_image.transform(rotated_image.size, Image.AFFINE, (1, 0, x_shift, 0, 1, y_shift))
+
+    # Рассчитываем матрицу аффинного преобразования для сдвига
+    shift_matrix = (1, 0, x_shift, 0, 1, y_shift)
+
+    # Применяем аффинное преобразование (сдвиг)
+    shifted_image = rotated_image.transform(rotated_image.size, Image.AFFINE, shift_matrix, resample=Image.BICUBIC)
 
     return shifted_image
+
 
 def generate_additional_coordinates(coordinates):
     additional_coordinates = {}
@@ -175,13 +197,13 @@ if __name__ == "__main__":
     rotation_angle1_1 = int(input("Введите первую точку диапазона случайного вращения для печати (Пример: -10): "))
     rotation_angle2_2 = int(input("Введите вторую точку диапазона случайного вращения для печати (Пример: 10): "))
 
-    coordinates_modify1 = int(input("Введите первую точку диапазона случайного смещения по горизонтали для подписи (Пример: -10 (на 10% вправо)): "))
-    coordinates_modify1_1 = int(input("Введите вторую точку диапазона случайного смещения по горизонтали для подписи (Пример: 10 (на 10% вправо)): "))
+    coordinates_modify1 = int(input("Введите первую точку диапазона случайного смещения по горизонтали для подписи (Пример: -10 (на 10% вправо): "))
+    coordinates_modify1_1 = int(input("Введите вторую точку диапазона случайного смещения по горизонтали для подписи (Пример: 1 (на 1% влево)): "))
     coordinates_modify2 = int(input("Введите первую точку диапазона случайного смещения по вертикали для подписи (Пример: -5 (на 5% вверх)): "))
     coordinates_modify2_2 = int(input("Введите вторую точку диапазона случайного смещения по вертикали для подписи (Пример: 5 (на 5% вниз)): "))
 
-    coordinates_modify3 = int(input("Введите первую точку диапазона случайного смещения по горизонтали для печати (Пример: -10 (на 10% влево)): "))
-    coordinates_modify3_1 = int(input("Введите вторую точку диапазона случайного смещения по горизонтали для печати (Пример: 10 (на 10% вправо)): "))
+    coordinates_modify3 = int(input("Введите первую точку диапазона случайного смещения по горизонтали для печати (Пример: -10 (на 10% вправо)): "))
+    coordinates_modify3_1 = int(input("Введите вторую точку диапазона случайного смещения по горизонтали для печати (Пример: 1 (на 1% влево)): "))
     coordinates_modify4 = int(input("Введите первую точку диапазона случайного смещения по вертикали для печати (Пример: -5 (на 5% вверх)): "))
     coordinates_modify4_2 = int(input("Введите вторую точку диапазона случайного смещения по вертикали для печати (Пример: 5 (на 5% вниз)): "))
 

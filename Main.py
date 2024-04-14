@@ -159,6 +159,7 @@ if __name__ == "__main__":
 
         # Генерация дополнительных координат на основе основных страниц
         coordinates = generate_additional_coordinates(base_coordinates)
+        print('Обработка...')
         overlay_images_on_pdf(pdf_path, image1_path, image2_path, coordinates, width_image1, height_image1, width_image1_1, height_image1_1, width_image2, height_image2)
         print("Документ обработан")
         

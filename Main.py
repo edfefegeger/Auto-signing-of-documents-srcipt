@@ -75,17 +75,16 @@ def apply_random_transforms(image):
     scale_factor_horizontal = random.uniform(scale_factor_horizontal1, scale_factor_horizontal2)   # Случайный масштаб по горизонтали (от 80% до 120%)
     scale_factor_vertical = random.uniform(scale_factor_vertical1, scale_factor_vertical2)   # Случайный масштаб по вертикали (от 80% до 120%)
 
-    # Поворот изображения
-    rotated_image = image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
+    # Масштабирование изображения по горизонтали и вертикали
+    new_width = int(image.width * scale_factor_horizontal)
+    new_height = int(image.height * scale_factor_vertical)
+    resized_image = image.resize((new_width, new_height), resample=Image.BICUBIC)
 
-    # Рассчитываем новый размер, необходимый для вмещения повернутого и масштабированного изображения
-    new_width = int(rotated_image.width * scale_factor_horizontal)
-    new_height = int(rotated_image.height * scale_factor_vertical)
+    # Поворот изображения после масштабирования
+    rotated_image = resized_image.rotate(rotation_angle, expand=True, resample=Image.BICUBIC)
 
-    # Изменяем размер изображения до рассчитанного размера
-    resized_image = rotated_image.resize((new_width, new_height), resample=Image.BICUBIC)
+    return rotated_image
 
-    return resized_image
 
 
 
